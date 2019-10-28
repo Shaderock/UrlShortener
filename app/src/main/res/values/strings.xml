@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">UrlShortener</string>
+    <string name="manage_links">Manage Links</string>
+    <string name="shorten_a_link">Shorten A Link</string>
 </resources>
