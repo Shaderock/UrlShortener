@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "LinkShortenApi";
     public static final String TABLE_LINKS = "links";
 
@@ -23,9 +23,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_LINKS +
-                "(" + KEY_ID + " integer primary key, " +
-                URL + " text, " +
-                HASH_ID + " text)");
+                "(" + KEY_ID + " integer primary key," +
+                URL + " text," + HASH_ID + " text)");
     }
 
     @Override

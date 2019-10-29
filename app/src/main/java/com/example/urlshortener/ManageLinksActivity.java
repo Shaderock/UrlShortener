@@ -16,11 +16,14 @@ public class ManageLinksActivity extends AppCompatActivity {
             link_to_read, normal_link;
     ApiRequestManager apiRequestManager;
     Button btn_shorten, btn_read;
+    OnDeleteDbListener onDeleteDbListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_links);
+
+        onDeleteDbListener = null;
 
         link_to_shorten = findViewById(R.id.link_to_shorten);
         shortened_link = findViewById(R.id.shortened_link);
@@ -85,6 +88,8 @@ public class ManageLinksActivity extends AppCompatActivity {
 
         if (count >= 10) {
             database.execSQL("delete from " + DBHelper.TABLE_LINKS);
+            if (onDeleteDbListener != null)
+                onDeleteDbListener.OnDeleteDb();
         }
 
         ContentValues contentValues = new ContentValues();
