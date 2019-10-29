@@ -85,8 +85,6 @@ public class ApiRequestManager {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-                        // присвоить значение url
                         try {
                             hashId.setUrl(response.getString("url"));
                         } catch (JSONException e) {

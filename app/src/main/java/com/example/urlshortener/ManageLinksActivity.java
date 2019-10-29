@@ -2,6 +2,9 @@ package com.example.urlshortener;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -56,7 +59,7 @@ public class ManageLinksActivity extends AppCompatActivity {
                         setNormalizedLink(link_with_url);
                     }
                 });
-    }//gp7lw9
+    }
 
     private void shortenLink(String url) {
         Link link = new Link(url, null);
@@ -70,6 +73,26 @@ public class ManageLinksActivity extends AppCompatActivity {
 
     private void setShortenedLink(Link link) {
         shortened_link.setText(link.getHashId());
+
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        Cursor cursor = database.rawQuery(
+                "select count(*) from " + DBHelper.TABLE_LINKS, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+
+        if (count >= 10) {
+            database.execSQL("delete from " + DBHelper.TABLE_LINKS);
+        }
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DBHelper.URL, link.getUrl());
+        contentValues.put(DBHelper.HASH_ID, link.getHashId());
+
+        database.insert(DBHelper.TABLE_LINKS, null, contentValues);
     }
 
     private void setNormalizedLink(Link link) {
