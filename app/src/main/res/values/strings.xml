@@ -2,4 +2,10 @@
     <string name="app_name">UrlShortener</string>
     <string name="manage_links">Manage Links</string>
     <string name="shorten_a_link">Shorten A Link</string>
+    <string name="link">Link</string>
+    <string name="read">Read!</string>
+    <string name="shortened_link">Shortened Link</string>
+    <string name="read_shortened_link">Read Shortened Link</string>
+    <string name="result">Result</string>
+    <string name="shorten">Shorten!</string>
 </resources>

@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -30,11 +31,11 @@ public class ApiRequestManager {
     }
 
     public interface onLinkShortenedListener {
-        void onLinkShortened(String hashId);
+        void onLinkShortened(Link link_with_hashId);
     }
 
     public interface onLinkReadListener {
-        void onLinkRead(String url);
+        void onLinkRead(Link link_with_url);
     }
 
     ApiRequestManager() {
@@ -42,11 +43,10 @@ public class ApiRequestManager {
         this.onLinkShortenedListener = null;
     }
 
-    public void createShortenedLink(Context context, String url) {
+    public void createShortenedLink(Context context, final Link url) {
 
-        final String hashId = null;
         HashMap<String, String> data = new HashMap<>();
-        data.put("url", url);
+        data.put("url", url.getUrl());
 
         queue = Volley.newRequestQueue(context);
 
@@ -57,12 +57,14 @@ public class ApiRequestManager {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("log", "success");
-
-                        // присвоить значение hashId
-
+                        try {
+                            url.setHashId(response.getString("hashid"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("log", "url set hash id problem");
+                        }
                         if (onLinkShortenedListener != null)
-                            onLinkShortenedListener.onLinkShortened(hashId);
+                            onLinkShortenedListener.onLinkShortened(url);
                     }
                 },
                 new Response.ErrorListener() {
@@ -75,21 +77,24 @@ public class ApiRequestManager {
         queue.add(jsonObjectRequest);
     }
 
-    public void readShortenedLink(Context context, String hashId) {
+    public void readShortenedLink(Context context, final Link hashId) {
         queue = Volley.newRequestQueue(context);
 
-        final String url = null;
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, apiUrl + hashId + "/", null,
+                Request.Method.GET, apiUrl + hashId.getHashId() + "/", null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
                         // присвоить значение url
-
+                        try {
+                            hashId.setUrl(response.getString("url"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("log", "set hash id problem");
+                        }
                         if (onLinkReadListener != null)
-                            onLinkReadListener.onLinkRead(url);
+                            onLinkReadListener.onLinkRead(hashId);
                     }
                 },
                 new Response.ErrorListener() {

@@ -30,9 +30,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-//        apiRequestManager = new ApiRequestManager();
-//        apiRequestManager.createShortenedLink(this,
-//                "https://www.youtube.com/");
     }
 }
